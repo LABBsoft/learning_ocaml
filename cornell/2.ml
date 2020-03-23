@@ -84,7 +84,7 @@ let area r = 3.14 *. r *. r
 Define a function that computes the root-mean-square of two numbers—i.e.,  (x2+y2)/2‾‾‾‾‾‾‾‾‾‾√ . Test your function with assert.
 *)
 let rms x y =
-  sqrt((x *. x + y *. y) /. 2)
+  sqrt((x *. x +. y *. y) /. 2.)
 
 (*
 Exercise: date fun [✭✭✭]
@@ -110,7 +110,12 @@ fib 2 = 1, and
 fib n = fib (n-1) + fib (n-2) for any n > 2.
 
 Test your function in the toplevel.
+*)
+let rec fib n =
+  if n < 3 then 1 else fib (n-1) + fib (n-2)
 
+
+(*
 Exercise: fib fast [✭✭✭]
 How quickly does your implementation of fib compute the 50th Fibonacci number? If it computes nearly instantaneously, congratulations! But the recursive solution most people come up with at first will seem to hang indefinitely. The problem is that the obvious solution computes subproblems repeatedly. For example, computing fib 5 requires computing both fib 3 and fib 4, and if those are computed separately, a lot of work (an exponential amount, in fact) is being redone.
 
@@ -123,29 +128,63 @@ h n pp p = h (n-1) p (pp+p) for any n > 1.
 The idea of h is that it assumes the previous two Fibonacci numbers were pp and p, then computes forward n more numbers. Hence, fib n = h n 0 1 for any n > 0.
 
 What is the first value of n for which fib_fast n is negative, indicating that integer overflow occurred?
+*)
+let fib_fast n =
+  let rec h n pp p =
+  if n=1 then p else h (n-1) p (pp+p) in
+  h n 0 1
 
+(*
 Exercise: poly types [✭✭✭]
 What is the type of each of the functions below? You can ask the toplevel to check your answers.
 
 let f x = if x then x else x
+x is boolean (if x)
+val f : bool -> bool = <fun>
+
 let g x y = if y then x else x
+y is boolean (if y)
+val g : 'a -> boolean -> 'a = <fun>
+
 let h x y z = if x then y else z
+x is boolean
+y and z are same type
+val h : boolean -> 'a -> 'a -> 'a = <fun>
+
 let i x y z = if x then y else y
+x is boolean
+val i : boolean -> 'a -> 'b -> 'a = <fun>
+
 Exercise: divide [✭✭]
 Write a function divide : numerator:float -> denominator:float -> float. Apply your function.
-
+*)
+let divide top bot =
+  top /. bot
+(*
 Exercise: associativity [✭✭]
 Which of the following produces an integer, which produces a function, and which produces an error? Decide on an answer, then check your answer in the toplevel.
 
 add 5 1
+int
 add 5
+fun
 (add 5) 1
+int
 add (5 1)
+error
+*)
+
+(*
 Exercise: average [✭✭]
 Define an infix operator +/. to compute the average of two floating-point numbers. For example,
 
 1.0 +/. 2.0 = 1.5
 0. +/. 0. = 0.
+*)
+let (+/.) a b =
+  (a +. b) /. 2.
+(*
+
 Exercise: hello world [✭]
 Type the following in utop:
 
@@ -162,15 +201,16 @@ Write a function print_int_list : int list -> unit that prints its input list, o
 2
 3
 Here is some code to get you started:
-
+*)
 let rec print_int_list = function 
 | [] -> () 
-| h::t -> (* fill in here *); 
+| h::t -> Printf.printf "%d\n" h;
           print_int_list t
-□
 
+
+(*
 Exercise: print int list iter [✭✭]
 Write a function print_int_list' : int list -> unit whose specification is the same as print_int_list. Do not use the keyword rec in your solution, but instead to use the List module function List.iter. Here is some code to get you started:
-
+*)
 let print_int_list' lst = 
-  List.iter (fun x -> (* fill in here *)) lst *)
+  List.iter (fun x -> Printf.printf "%d\n" x;) lst

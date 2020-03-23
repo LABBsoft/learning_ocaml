@@ -5,3 +5,5 @@
 ``^`` is the string concatenation operator
 
 Double apostrophe comments are OcamlDoc comments
+
+``@`` is the list append operator
