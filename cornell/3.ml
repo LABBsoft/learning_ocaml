@@ -4,7 +4,7 @@ Construct a list that has the integers 1 through 5 in it. Use the square bracket
 [1;2;3;4;5]
 *)
 
-(*)
+(*
 Construct the same list, but do not use the square bracket notation. Instead use :: and [].
 1::2::3::4::5::[]
 Construct the same list again. This time, the following expression must appear in your answer: [2;3;4]. Use the @ operator, and do not use ::.
@@ -21,7 +21,7 @@ let rec product lst =
   | [] -> 1
   | h::t -> h * product t
 
-(*)
+(*
 
 Exercise: concat [✭✭, optional]
 Write a function that concatenates all the strings in a list. The concatenation of all the strings in an empty list is the empty string "". Hint: this function is really not much different than sum or product.
@@ -31,13 +31,13 @@ let rec concat lst =
   | [] -> ""
   | h::t -> h ^ concat t
 
-(*)
+(*
 Exercise: product test [✭✭, optional]
 Unit test the function product that you wrote in an exercise above.
 *)
 
 
-(*)
+(*
 Exercise: patterns [✭✭✭]
 Using pattern matching, write three functions, one for each of the following properties. Your functions should return true if the input list has the property and false otherwise.
 
@@ -56,7 +56,7 @@ let twofour = function
 let firsttwo = function
 | a::b::t when a=b -> true
 | _ -> false
-(*)
+(*
 Exercise: library [✭✭✭]
 Consult the List standard library to solve these exercises:
 
@@ -65,14 +65,14 @@ If the list has fewer than five elements, return 0. Hint: List.length and List.n
 *)
 let fifth (l:int list) =
   if List.length l < 5 then 0 else List.nth l 4
-(*)
+(*
 Write a function that takes an int list and returns the list sorted in descending order. 
 Hint: List.sort with Stdlib.compare as its first argument, and List.rev.
 *)
 let desc_sort (l: int list) =
   List.rev (List.sort Stdlib.compare l)
 
-(*)
+(*
 Exercise: library test [✭✭✭, optional]
 Write a couple OUnit unit tests for each of the functions you wrote in the previous exercise.
 
@@ -83,7 +83,7 @@ Hint: Use two library functions, and do not write any pattern matching code of y
 *)
 let last lst =
   List.hd (List.rev lst)
-(*)
+(*
 
 Write a function any_zeroes : int list -> bool that returns true if and only if the input list contains at least one 0. 
 Hint: use one library function, and do not write any pattern matching code of your own.
@@ -91,7 +91,7 @@ Hint: use one library function, and do not write any pattern matching code of yo
 let any_zeroes lst =
   let aux a = a = 0 in
   List.exists aux lst
-(*)
+(*
 
 Your solutions will be only one or two lines of code each.
 
@@ -102,22 +102,34 @@ If lst has fewer than n elements, return all of them.
 let rec take n = function
   | h::t when n<>0 -> h::take (n-1) t
   | _ -> []
-(*)
+(*
 Write a function drop : int -> 'a list -> 'a list such that drop n lst returns all but the first n elements of lst. 
 If lst has fewer than n elements, return the empty list.
 *)
 let rec drop n = function
   | h::t when n<>0 -> drop(n-1) t
   | x -> x
-(*)
+(*
 Exercise: take drop tail [✭✭✭✭, recommended]
 Revise your solutions for take and drop to be tail recursive, if they aren't already. 
 *)
-let rec take_tr n = function
-| [] -> []
-| h::t -> 
+let take_tr n list = 
+  let rec aux n aux acc =
+    
 
-(*)
+let take_tr n list =
+  let rec aux n acc = function
+  | [] -> []
+  | h::t when n = 0 -> acc
+  | h::t -> aux (n-1) t (acc @ [h]) in
+  aux n [] list
+
+let rec drop_tr n = function
+| [] -> []
+| h::t when n = 1 -> t
+| h::t -> drop_tr (n-1) t
+
+(*
 
 
 Test them on long lists with large values of n to see whether they run out of stack space. 
