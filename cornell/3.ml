@@ -113,21 +113,15 @@ let rec drop n = function
 Exercise: take drop tail [✭✭✭✭, recommended]
 Revise your solutions for take and drop to be tail recursive, if they aren't already. 
 *)
-let take_tr n list = 
-  let rec aux n aux acc =
     
-
-let take_tr n list =
-  let rec aux n acc = function
-  | [] -> []
-  | h::t when n = 0 -> acc
-  | h::t -> aux (n-1) t (acc @ [h]) in
-  aux n [] list
 
 let rec drop_tr n = function
 | [] -> []
 | h::t when n = 1 -> t
 | h::t -> drop_tr (n-1) t
+
+let take_tr n list = 
+  List.rev(drop_tr (List.length list - n) (List.rev list))
 
 (*
 
@@ -152,8 +146,28 @@ let longlist = 0 -- 1_000_000
 It would be worthwhile to study the definition of -- to convince yourself that you understand (i) how it works and (ii) why it is tail recursive.
 
 Exercise: unimodal [✭✭✭]
-Write a function is_unimodal : int list -> bool that takes an integer list and returns whether that list is unimodal. A unimodal list is a list that monotonically increases to some maximum value then monotonically decreases after that value. Either or both segments (increasing or decreasing) may be empty. A constant list is unimodal, as is the empty list.
+Write a function is_unimodal : int list -> bool that takes an integer list and returns whether that list is unimodal. 
+A unimodal list is a list that monotonically increases to some maximum value then monotonically decreases after that value.
+Either or both segments (increasing or decreasing) may be empty.
+A constant list is unimodal, as is the empty list.
+*)
+let is_unimodal (list: int list) =
+  let rec aux prev inc = function
+  | [] -> true
+  | h::t when inc=true -> aux h (h > prev) t
+  | h::t when inc=false -> if h > prev then false else aux h false t in
+  match list with
+  | [] -> true
+  | h::t -> aux h true t
 
+let is_unimodal (list: int list) =
+  let rec aux (inc: bool) = function
+  | [] | _::_ -> true
+  | a::b::t when a < b && inc = false -> false
+  | a::b::t -> aux inc = true && a <= b b::t in
+  aux true list
+
+(*)
 Exercise: powerset [✭✭✭]
 Write a function powerset : int list -> int list list that takes a set S represented as a list and returns the set of all subsets of S. The order of subsets in the powerset and the order of elements in the subsets do not matter.
 
