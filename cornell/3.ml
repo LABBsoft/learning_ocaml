@@ -169,10 +169,27 @@ let is_unimodal (list: int list) =
 
 (*)
 Exercise: powerset [✭✭✭]
-Write a function powerset : int list -> int list list that takes a set S represented as a list and returns the set of all subsets of S. The order of subsets in the powerset and the order of elements in the subsets do not matter.
+Write a function powerset : int list -> int list list that 
+takes a set S represented as a list and returns the set of all subsets of S. 
+The order of subsets in the powerset and the order of elements in the subsets do not matter.
 
-Hint: Consider the recursive structure of this problem. Suppose you already have p, such that p = powerset s. How could you use p to compute powerset (x::s)?
+given powerset n
+powerset n+1
+for each list
+return list + k :: list
 
+*)
+
+let rec powerset q =
+  let rec dup (x: int) = function
+  | [] -> [[x]]
+  | h::t -> (x::h)::(dup x t) in
+  let rec a (l : int list list) = function
+  | [] -> l
+  | h::t -> a (l @ dup h l) t in
+  []::a [] q
+
+(*)
 Exercise: print int list rec [✭✭]
 Write a function print_int_list : int list -> unit that prints its input list, one number per line. For example, print_int_list [1;2;3] should result in this output:
 
@@ -180,13 +197,13 @@ Write a function print_int_list : int list -> unit that prints its input list, o
 2
 3
 Here is some code to get you started:
-
+*)
 let rec print_int_list = function 
-| [] -> () 
-| h::t -> (* fill in here *); 
+| [] -> ()
+| h::t -> print_int(h); 
           print_int_list t
-□
 
+(*)
 Exercise: print int list iter [✭✭]
 Write a function print_int_list' : int list -> unit whose specification is the same as print_int_list. Do not use the keyword rec in your solution, but instead to use the List module function List.iter. Here is some code to get you started:
 
@@ -218,9 +235,31 @@ Write a function safe_hd : 'a list -> 'a option that returns Some x if the head 
 
 Also write a function safe_tl : 'a list -> 'a list option that returns the tail of the list, or None if the list is empty.
 
+*)
+let safe_hd = function 
+  | [] -> None
+  | h::_ -> Some h
+
+let rec safe_tl = function 
+  | [] -> None
+  | h::[] -> Some h
+  | h::t -> safe_tl t
+
+(*)
+
 Exercise: pokefun [✭✭✭]
 Write a function max_hp : pokemon list -> pokemon option that, given a list of pokemon, finds the Pokémon with the highest HP.
 
+*)
+(* let max_hp l =
+let rec aux max = function
+| [] -> max
+| h::t with h.hp > max.hp -> aux h t
+| h::t -> aux max t
+match l with
+| [] -> None
+| h::t -> aux None *)
+(*)
 Exercise: date before [✭✭]
 Define a date-like triple to be a value of type int*int*int. Examples of date-like triples include (2013, 2, 1) and (0,0,1000). A date is a date-like triple whose first part is a positive year (i.e., a year in the common era), second part is a month between 1 and 12, and third part is a day between 1 and 31 (or 30, 29, or 28, depending on the month and year). (2013, 2, 1) is a date; (0,0,1000) is not.
 
